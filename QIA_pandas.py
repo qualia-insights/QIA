@@ -9,19 +9,20 @@ def load_csv_data(path_to_data):
     '''
     only_files = [f for f in listdir(path_to_data) if isfile(join(path_to_data, f))]
     only_files.sort()
-    #bank_data = None
+    bank_data = None
     for file_index in range(0, len(only_files)):
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
         month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description', 'not_known1', 'not_known2','type'],
                        parse_dates=True)
-    '''
+    
         if len(month_data) > 0:
-            if bank_data == None:
+            if bank_data is None:
                 bank_data = month_data
             else:
-                bank_data = pd.concat(month_data, bank_data)
-        
+                bank_data = pd.concat([month_data, bank_data])
+    print(len(bank_data))
+    '''    
     # now we have read the data but the format is not correct, so below
     # we reformat the types to the proper type
     new_bank_data = []
