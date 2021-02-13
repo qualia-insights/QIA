@@ -13,7 +13,7 @@ def load_csv_data(path_to_data):
     for file_index in range(0, len(only_files)):
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
-        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description', 'not_known1', 'not_known2','type'],
+        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
                        parse_dates=True)
     
         if len(month_data) > 0:
@@ -22,15 +22,13 @@ def load_csv_data(path_to_data):
             else:
                 bank_data = pd.concat([month_data, bank_data])
     print(len(bank_data))
-    '''    
-    # now we have read the data but the format is not correct, so below
-    # we reformat the types to the proper type
+    print(bank_data.head())
+    # now we have read the data and adjust amount based on type
     new_bank_data = []
     for index in range(0, len(bank_data)):
-        date_str = bank_data[index][0]
-        year = int(date_str.split("/")[0])
-        month = int(date_str.split("/")[1])
-        day = int(date_str.split("/")[2])
+        
+        
+        
         new_row = {
                     'date': date(year, month, day),
                     'amount': float(bank_data[index][1]),
@@ -44,7 +42,6 @@ def load_csv_data(path_to_data):
         new_bank_data.append(new_row)
 
     return new_bank_data
-    '''
 
 if __name__ == "__main__":
     print("Welcome to QI Pandas Accounting System verion 0.1 by Todd V. Rovito rovitotv@gmail.com")
