@@ -21,29 +21,13 @@ def load_csv_data(path_to_data):
                 bank_data = month_data
             else:
                 bank_data = pd.concat([month_data, bank_data])
-    print(len(bank_data))
-    print(bank_data.head())
-    # now we have read the data and adjust amount based on type
-    new_bank_data = []
-    for index in range(0, len(bank_data)):
-        
-        
-        
-        new_row = {
-                    'date': date(year, month, day),
-                    'amount': float(bank_data[index][1]),
-                    'description_1': bank_data[index][2],
-                    'description_2': bank_data[index][3],
-                    'description_3': bank_data[index][4],
-                    'type': bank_data[index][5],
-        }
-        if new_row['type'] == 'DEBIT':
-            new_row['amount'] = new_row['amount'] * -1
-        new_bank_data.append(new_row)
-
-    return new_bank_data
+    # this is the power of pandas!
+    # we can look up all the transaction type of "DEBIT" and change
+    # multiple the amount by -1 in one line of CLEAR CODE
+    bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
+    return bank_data
 
 if __name__ == "__main__":
     print("Welcome to QI Pandas Accounting System verion 0.1 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
-    load_csv_data("/home/rovitotv/data/QIA_data/2020/")
+    bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
