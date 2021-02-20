@@ -42,6 +42,42 @@ def read_categories(path_to_categories_csv):
             categories.append(row)
     '''
     return categories
+    
+def assign_categories(bank_data, categories_data):
+    '''
+        asigns the categories to each bank_data record based on information
+        in categories data
+    '''
+    bank_data['category'] = "" # add a new column category
+    '''
+    bank_categories = []
+    for i in range(0, len(bank_data)):
+        category = "unknown"
+        for c in range(0, len(categories)):
+            # check for rent
+            if "CHECK " in bank_data[i]['description_1']:
+                if bank_data[i]['amount'] == -127.00:
+                    category = "rent"
+                    break
+                if bank_data[i]['amount'] == -160.00:
+                    category = "rent"
+                    break
+
+            # check categories
+            if categories[c][0].lower() in bank_data[i]['description_1'].lower():
+                category = categories[c][1]
+                break
+            elif categories[c][0].lower() in bank_data[i]['description_2'].lower():
+                category = categories[c][1]
+                break
+            elif categories[c][0].lower() in bank_data[i]['description_3'].lower():
+                category = categories[c][1]
+                break
+        bank_categories.append(category)
+    '''
+
+    return bank_data
+
 
 if __name__ == "__main__":
     print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
@@ -50,3 +86,4 @@ if __name__ == "__main__":
     print("Number of bank_data rows: %d" % len(bank_data))
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
+    bank_data = assign_categories(bank_data, categories_data)
