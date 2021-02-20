@@ -88,4 +88,4 @@ if __name__ == "__main__":
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
     bank_data = assign_categories(bank_data, categories_data)
-    bank_data.tail(10)
+    print(bank_data.tail(10))
