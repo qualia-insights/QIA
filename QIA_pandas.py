@@ -49,10 +49,11 @@ def assign_categories(bank_data, categories_data):
         in categories data
     '''
     bank_data['category'] = "" # add a new column category
-    '''
+    
     bank_categories = []
     for i in range(0, len(bank_data)):
-        category = "unknown"
+        bank_data.at[i, 'category'] = "unknown"
+        '''
         for c in range(0, len(categories)):
             # check for rent
             if "CHECK " in bank_data[i]['description_1']:
@@ -74,7 +75,7 @@ def assign_categories(bank_data, categories_data):
                 category = categories[c][1]
                 break
         bank_categories.append(category)
-    '''
+        '''
 
     return bank_data
 
