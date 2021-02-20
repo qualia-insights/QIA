@@ -52,7 +52,7 @@ def assign_categories(bank_data, categories_data):
     
     bank_categories = []
     for i in range(0, len(bank_data)):
-        bank_data.at[i, 'category'] = "unknown"
+        bank_data.iat[i, 6] = "unknown"
         '''
         for c in range(0, len(categories)):
             # check for rent
