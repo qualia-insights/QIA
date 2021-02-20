@@ -13,8 +13,9 @@ def load_csv_data(path_to_data):
     for file_index in range(0, len(only_files)):
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
-        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
-                       parse_dates=True)
+        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1', 
+            'description_2', 'description_3','type'],
+            parse_dates=True)
     
         if len(month_data) > 0:
             if bank_data is None:
@@ -28,6 +29,6 @@ def load_csv_data(path_to_data):
     return bank_data
 
 if __name__ == "__main__":
-    print("Welcome to QI Pandas Accounting System verion 0.1 by Todd V. Rovito rovitotv@gmail.com")
+    print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
