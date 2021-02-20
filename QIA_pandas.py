@@ -27,8 +27,24 @@ def load_csv_data(path_to_data):
     # multiple the amount by -1 in one line of CLEAR CODE
     bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
     return bank_data
+    
+def read_categories(path_to_categories_csv):
+    '''
+        reads the categories csv file, which will make it easier
+        to assign categories in mass
+    '''
+    categories = pd.read_csv(path_to_categories_csv, header=None, names=['key','category'])
+    '''
+    categories = []
+    with open(path_to_categories_csv, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        for row in csv_reader:
+            categories.append(row)
+    '''
+    return categories
 
 if __name__ == "__main__":
     print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
+    categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
