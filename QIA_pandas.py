@@ -47,4 +47,6 @@ if __name__ == "__main__":
     print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
+    print(len(bank_data))
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
+    print(len(categories_data))
