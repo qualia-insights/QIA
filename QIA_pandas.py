@@ -52,8 +52,9 @@ def assign_categories(bank_data, categories_data):
     
     bank_categories = []
     for i in range(0, len(bank_data)):
-        #bank_data.iat[i, 6] = "unknown"
-        bank_data.at[i, 'category'] = "unknown"
+        bank_data.iat[i, 6] = "unknown"
+        #bank_data.at[i, 'category'] = "unknown" # why does this not work?
+        print("desc 1: %s" % bank_data.at[i, 'description_1'])
         '''
         for c in range(0, len(categories)):
             # check for rent
