@@ -26,6 +26,11 @@ def load_csv_data(path_to_data):
     # we can look up all the transaction type of "DEBIT" and change
     # multiple the amount by -1 in one line of CLEAR CODE
     bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
+    '''
+    bank_data['description_1'] = bank_data['description_1'].str.lower()
+    bank_data['description_2'] = bank_data['description_2'].str.lower()
+    bank_data['description_3'] = bank_data['description_3'].str.lower()    
+    '''
     return bank_data
     
 def read_categories(path_to_categories_csv):
@@ -34,6 +39,7 @@ def read_categories(path_to_categories_csv):
         to assign categories in mass
     '''
     categories = pd.read_csv(path_to_categories_csv, header=None, names=['key','category'])
+    # categories['key'] = categories['key'].str.lower()
     '''
     categories = []
     with open(path_to_categories_csv, 'r') as csv_file:
@@ -47,37 +53,38 @@ def assign_categories(bank_data, categories_data):
     '''
         asigns the categories to each bank_data record based on information
         in categories data
+        
+        field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
     '''
     bank_data['category'] = "" # add a new column category
     
     bank_categories = []
     for i in range(0, len(bank_data)):
-        bank_data.iat[i, 6] = "unknown"
-        #bank_data.at[i, 'category'] = "unknown" # why does this not work?
-        print("desc 1: %s" % bank_data.at[i, 'description_1'])
-        '''
-        for c in range(0, len(categories)):
+        category = "unknown"
+        for c in range(0, len(categories_data)):
             # check for rent
-            if "CHECK " in bank_data[i]['description_1']:
-                if bank_data[i]['amount'] == -127.00:
+            if "CHECK " in bank_data.iat[i, 2]:
+                if bank_data.iat[i, 1] == -127.00:
                     category = "rent"
                     break
-                if bank_data[i]['amount'] == -160.00:
+                if bank_data.iat[i, 1] == -160.00:
                     category = "rent"
                     break
 
             # check categories
-            if categories[c][0].lower() in bank_data[i]['description_1'].lower():
-                category = categories[c][1]
+            if categories_data.iat[c, 0].lower() in bank_data.iat[i, 2].lower():
+                category = categories_data.iat[c, 1]
                 break
-            elif categories[c][0].lower() in bank_data[i]['description_2'].lower():
-                category = categories[c][1]
+            '''
+            elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
+                category = categories_data.iat[c, 1]
                 break
-            elif categories[c][0].lower() in bank_data[i]['description_3'].lower():
-                category = categories[c][1]
+            
+            elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
+                category = categories_data.iat[c, 1]
                 break
-        bank_categories.append(category)
-        '''
+            '''
+        bank_data.iat[i, 6] = category
     return bank_data
 
 
