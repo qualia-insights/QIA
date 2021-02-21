@@ -75,11 +75,11 @@ def assign_categories(bank_data, categories_data):
             if categories_data.iat[c, 0].lower() in bank_data.iat[i, 2].lower():
                 category = categories_data.iat[c, 1]
                 break
-            '''
-            elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
+            
+            elif not pd.isnull(bank_data.iat[i, 3]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
                 category = categories_data.iat[c, 1]
                 break
-            
+            '''
             elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
                 category = categories_data.iat[c, 1]
                 break
