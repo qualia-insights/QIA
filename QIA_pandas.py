@@ -83,3 +83,6 @@ if __name__ == "__main__":
     bank_data = assign_categories(bank_data, categories_data)
     # print unknowns and total $ amount on unknowns
     print(bank_data)
+    # pandas sure does make this easy!
+    bank_data_unknown = bank_data.query('category == "unknown"')
+    print(bank_data_unknown)
