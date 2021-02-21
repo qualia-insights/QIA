@@ -26,11 +26,6 @@ def load_csv_data(path_to_data):
     # we can look up all the transaction type of "DEBIT" and change
     # multiple the amount by -1 in one line of CLEAR CODE
     bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
-    '''
-    bank_data['description_1'] = bank_data['description_1'].str.lower()
-    bank_data['description_2'] = bank_data['description_2'].str.lower()
-    bank_data['description_3'] = bank_data['description_3'].str.lower()    
-    '''
     return bank_data
     
 def read_categories(path_to_categories_csv):
@@ -39,14 +34,6 @@ def read_categories(path_to_categories_csv):
         to assign categories in mass
     '''
     categories = pd.read_csv(path_to_categories_csv, header=None, names=['key','category'])
-    # categories['key'] = categories['key'].str.lower()
-    '''
-    categories = []
-    with open(path_to_categories_csv, 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        for row in csv_reader:
-            categories.append(row)
-    '''
     return categories
     
 def assign_categories(bank_data, categories_data):
@@ -75,20 +62,18 @@ def assign_categories(bank_data, categories_data):
             if categories_data.iat[c, 0].lower() in bank_data.iat[i, 2].lower():
                 category = categories_data.iat[c, 1]
                 break
-            
             elif not pd.isnull(bank_data.iat[i, 3]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
                 category = categories_data.iat[c, 1]
                 break
-            '''
             elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
                 category = categories_data.iat[c, 1]
                 break
-            '''
         bank_data.iat[i, 6] = category
     return bank_data
 
 
 if __name__ == "__main__":
+    pd.options.display.width = 160
     print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
@@ -96,4 +81,5 @@ if __name__ == "__main__":
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
     bank_data = assign_categories(bank_data, categories_data)
-    print(bank_data.tail(10))
+    # print unknowns and total $ amount on unknowns
+    print(bank_data)
