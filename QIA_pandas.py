@@ -2,6 +2,8 @@ import pandas as pd
 from os import listdir
 from os.path import isfile, join
 
+# docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
+
 def load_csv_data(path_to_data):
     '''
         provided the path to the data load the data but skip the
@@ -73,7 +75,8 @@ def assign_categories(bank_data, categories_data):
 
 
 if __name__ == "__main__":
-    pd.options.display.width = 160
+    pd.options.display.width = 300
+    pd.options.display.max_rows = 200
     print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
@@ -82,7 +85,10 @@ if __name__ == "__main__":
     print("Number of categories_data rows: %d" % len(categories_data))
     bank_data = assign_categories(bank_data, categories_data)
     # print unknowns and total $ amount on unknowns
-    print(bank_data)
+    # print(bank_data)
     # pandas sure does make this easy!
-    bank_data_unknown = bank_data.query('category == "unknown"')
+    print("summary by category")
+    print(bank_data.groupby('category')['amount'].sum())
+    bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
+    print("Number of unknowns: %d" % len(bank_data_unknown))
     print(bank_data_unknown)
