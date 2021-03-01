@@ -59,6 +59,12 @@ def assign_categories(bank_data, categories_data):
                 if bank_data.iat[i, 1] == -160.00:
                     category = "rent"
                     break
+                if "CHECK 143  REF. NO. 096162985" in bank_data.iat[i, 2]:
+                    # for Taxes in 2020
+                    category = "dont_count"
+                if "CHECK 144  REF. NO. 090826555" in bank_data.iat[i, 2]:
+                    # for Taxes in 2020
+                    category = "income"
 
             # check categories
             if categories_data.iat[c, 0].lower() in bank_data.iat[i, 2].lower():
@@ -96,4 +102,8 @@ if __name__ == "__main__":
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
     print("Number of unknowns: %d" % len(bank_data_unknown))
-    print(bank_data_unknown)
+    if len(bank_data_unknown) > 0:
+        print(bank_data_unknown)
+    
+    # output bank data
+    # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
