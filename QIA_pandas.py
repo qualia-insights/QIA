@@ -1,6 +1,7 @@
 import pandas as pd
 from os import listdir
 from os.path import isfile, join
+import pdb
 
 # docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
 
@@ -44,6 +45,12 @@ def assign_categories(bank_data, categories_data):
         in categories data
         
         field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
+        
+        if a category is mis-classified because of categories.csv not being right add this debug code:
+                            if "9969 Debit Card Purchase Loves Travel S00004275 Dayton Oh" in bank_data.iat[i,2]:
+                                print("category: %d" % c)
+                             
+                            in the three if statements starting on line 77
     '''
     bank_data['category'] = "" # add a new column category
     
@@ -74,7 +81,7 @@ def assign_categories(bank_data, categories_data):
                 category = categories_data.iat[c, 1]
                 break
             elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
-                category = categories_data.iat[c, 1]
+                category = categories_data.iat[c, 1]       
                 break
         bank_data.iat[i, 6] = category
     return bank_data
