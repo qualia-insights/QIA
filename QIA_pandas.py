@@ -106,7 +106,9 @@ if __name__ == "__main__":
     print(bank_data.groupby('category')['amount'].sum())
     total = bank_data['amount'].sum()
     print("Total (profit or loss): %f" % total)
-    total_with_out_dont_count = bank_data['amount'].sumif()
+    bank_data_dont_count = bank_data.query('category == "dont_count"')
+    total_dont_count = bank_data_dont_count['amount'].sum()
+    total_with_out_dont_count = total - total_dont_count
     print("Total (profit or loss) without dont_count: %f" % total_with_out_dont_count)
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
