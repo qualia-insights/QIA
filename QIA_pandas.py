@@ -16,10 +16,10 @@ def load_csv_data(path_to_data):
     for file_index in range(0, len(only_files)):
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
-        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1', 
+        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
             'description_2', 'description_3','type'],
             parse_dates=True)
-    
+
         if len(month_data) > 0:
             if bank_data is None:
                 bank_data = month_data
@@ -30,7 +30,7 @@ def load_csv_data(path_to_data):
     # multiple the amount by -1 in one line of CLEAR CODE
     bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
     return bank_data
-    
+
 def read_categories(path_to_categories_csv):
     '''
         reads the categories csv file, which will make it easier
@@ -38,22 +38,22 @@ def read_categories(path_to_categories_csv):
     '''
     categories = pd.read_csv(path_to_categories_csv, header=None, names=['key','category'])
     return categories
-    
+
 def assign_categories(bank_data, categories_data):
     '''
         asigns the categories to each bank_data record based on information
         in categories data
-        
+
         field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
-        
+
         if a category is mis-classified because of categories.csv not being right add this debug code:
                             if "9969 Debit Card Purchase Loves Travel S00004275 Dayton Oh" in bank_data.iat[i,2]:
                                 print("category: %d" % c)
-                             
+
                             in the three if statements starting on line 77
     '''
     bank_data['category'] = "" # add a new column category
-    
+
     bank_categories = []
     for i in range(0, len(bank_data)):
         category = "unknown"
@@ -81,7 +81,7 @@ def assign_categories(bank_data, categories_data):
                 category = categories_data.iat[c, 1]
                 break
             elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
-                category = categories_data.iat[c, 1]       
+                category = categories_data.iat[c, 1]
                 break
         bank_data.iat[i, 6] = category
     return bank_data
@@ -106,11 +106,13 @@ if __name__ == "__main__":
     print(bank_data.groupby('category')['amount'].sum())
     total = bank_data['amount'].sum()
     print("Total (profit or loss): %f" % total)
+    total_with_out_dont_count = bank_data['amount'].sumif()
+    print("Total (profit or loss) without dont_count: %f" % total_with_out_dont_count)
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
     print("Number of unknowns: %d" % len(bank_data_unknown))
     if len(bank_data_unknown) > 0:
         print(bank_data_unknown)
-    
+
     # output bank data
     # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
