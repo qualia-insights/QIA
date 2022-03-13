@@ -1,7 +1,9 @@
 import pandas as pd
 from os import listdir
 from os.path import isfile, join
+import pathlib
 import pdb
+import sys
 
 # docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
 
@@ -13,6 +15,9 @@ def load_csv_data(path_to_data):
     only_files = [f for f in listdir(path_to_data) if isfile(join(path_to_data, f))]
     only_files.sort()
     bank_data = None
+    year_to_process_parts = pathlib.Path(path_to_data)
+    year_to_process = year_to_process_parts.parts[-1]
+    print("year to process: %s" % year_to_process)
     for file_index in range(0, len(only_files)):
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
@@ -21,6 +26,14 @@ def load_csv_data(path_to_data):
             parse_dates=True)
 
         if len(month_data) > 0:
+            # we need to check and make sure the data is from the proper year!
+            # this in case doo doo brian downloads a csv file outside of the correct range
+            start_day = pd.to_datetime('01.01.%s' % year_to_process)
+            end_day = pd.to_datetime('12.31.%s' % year_to_process)
+            month_data_between = month_data[month_data['date'].between(start_day, end_day)]
+            if len(month_data_between) != len(month_data):
+                print("month data includes data outside of the year %s" % year_to_process)
+                sys.exit(200)
             if bank_data is None:
                 bank_data = month_data
             else:
@@ -41,7 +54,7 @@ def read_categories(path_to_categories_csv):
 
 def assign_categories(bank_data, categories_data):
     '''
-        asigns the categories to each bank_data record based on information
+        assigns the categories to each bank_data record based on information
         in categories data
 
         field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
@@ -51,12 +64,16 @@ def assign_categories(bank_data, categories_data):
                                 print("category: %d" % c)
 
                             in the three if statements starting on line 77
+        to print a specific row of the bank_data use this code:
+            print(bank_data.iloc[[i]])
     '''
     bank_data['category'] = "" # add a new column category
 
     bank_categories = []
     for i in range(0, len(bank_data)):
         category = "unknown"
+        #if i == 426:
+        #    print(bank_data.iloc[[i]])
         for c in range(0, len(categories_data)):
             # check for rent
             if "CHECK " in bank_data.iat[i, 2]:
@@ -80,7 +97,7 @@ def assign_categories(bank_data, categories_data):
             elif not pd.isnull(bank_data.iat[i, 3]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
                 category = categories_data.iat[c, 1]
                 break
-            elif categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
+            elif not pd.isnull(bank_data.iat[i, 4]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
                 category = categories_data.iat[c, 1]
                 break
         bank_data.iat[i, 6] = category
@@ -90,9 +107,9 @@ def assign_categories(bank_data, categories_data):
 if __name__ == "__main__":
     pd.options.display.width = 300
     pd.options.display.max_rows = 1000
-    print("Welcome to QI Pandas Accounting System verion 0.2 by Todd V. Rovito rovitotv@gmail.com")
+    print("Welcome to QI Pandas Accounting System 2021 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
-    bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2020/")
+    bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2021/")
     print("Number of bank_data rows: %d" % len(bank_data))
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
