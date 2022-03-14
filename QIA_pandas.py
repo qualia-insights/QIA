@@ -23,7 +23,7 @@ def load_csv_data(path_to_data):
         print("processing %s" % csv_file_name)
         month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
             'description_2', 'description_3','type'],
-            parse_dates=True)
+            parse_dates=['date'])
 
         if len(month_data) > 0:
             # we need to check and make sure the data is from the proper year!
