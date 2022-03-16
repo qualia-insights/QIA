@@ -97,6 +97,24 @@ def assign_categories(bank_data, categories_data):
                 if "CHECK 144  REF. NO. 090826555" in bank_data.iat[i, 2]:
                     # for Taxes in 2020
                     category = "income"
+                if "CHECK 147  REF. NO. L095758546" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 client refund
+                    category = "income"
+                if "CHECK 148  REF. NO. 096175978" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 check to Rovitos
+                    category = "dont_count"
+                if "CHECK 7215  REF. NO. 096709526" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 check to Rovitos
+                    category = "liscensing"
+                if "CHECK 149  REF. NO. 089600434" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 client refund
+                    category = "income"
+                if "CHECK 150  REF. NO. 095795498" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 client refund
+                    category = "income"
+                if "CHECK 151  REF. NO. 095557625" in bank_data.iat[i, 2]:
+                    # for Taxes in 2021 check to Rovitos
+                    category = "dont_count"
 
             # check categories
             if categories_data.iat[c, 0].lower() in bank_data.iat[i, 2].lower():
@@ -116,6 +134,9 @@ if __name__ == "__main__":
     print(locale.setlocale(locale.LC_ALL, ''))
     pd.options.display.width = 300
     pd.options.display.max_rows = 1000
+    # options below make every float shown with print use commas
+    pd.options.display.float_format = '{:,.2f}'.format 
+    # pd.options.display.float_format = '${:,.2f}'.format # if you want to include $
     data_directory = "/home/rovitotv/data/QIA_data/2021/"
     print("Welcome to QI Pandas Accounting System 2021 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
@@ -140,7 +161,6 @@ if __name__ == "__main__":
         locale.currency(total_with_out_dont_count, grouping=True))
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
-    print("Number of unknowns: %d" % len(bank_data_unknown))
     if len(bank_data_unknown) > 0:
         #print(bank_data_unknown)
         # field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
