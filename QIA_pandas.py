@@ -19,6 +19,8 @@ def load_csv_data(path_to_data):
     year_to_process = year_to_process_parts.parts[-1]
     print("year to process: %s" % year_to_process)
     for file_index in range(0, len(only_files)):
+        if only_files[file_index].startswith('income_1099' ):
+            continue
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
         month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
@@ -43,6 +45,11 @@ def load_csv_data(path_to_data):
     # multiple the amount by -1 in one line of CLEAR CODE
     bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
     return bank_data
+
+def load_income_1099_csv(path_to_csv_file):
+    income_data = pd.read_csv(path_to_csv_file, header=None, skiprows=1, 
+            names=['company','tin','amount'])
+    return income_data
 
 def read_categories(path_to_categories_csv):
     '''
@@ -107,9 +114,10 @@ def assign_categories(bank_data, categories_data):
 if __name__ == "__main__":
     pd.options.display.width = 300
     pd.options.display.max_rows = 1000
+    data_directory = "/home/rovitotv/data/QIA_data/2021/"
     print("Welcome to QI Pandas Accounting System 2021 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
-    bank_data = load_csv_data("/home/rovitotv/data/QIA_data/2021/")
+    bank_data = load_csv_data(data_directory)
     print("Number of bank_data rows: %d" % len(bank_data))
     categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
@@ -131,7 +139,26 @@ if __name__ == "__main__":
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
     print("Number of unknowns: %d" % len(bank_data_unknown))
     if len(bank_data_unknown) > 0:
-        print(bank_data_unknown)
+        #print(bank_data_unknown)
+        # field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
+        print(bank_data_unknown[['date','amount','description_1']])
+    print("Number of unknowns: %d" % len(bank_data_unknown))
+    print("Business Income - Gross Receipts================================================================================")
+    income_data_1099_MISC = load_income_1099_csv(data_directory + "income_1099-MISC.csv")
+    income_data_1099_NEC = load_income_1099_csv(data_directory + "income_1099-NEC.csv")
+    income_data_1099_K = load_income_1099_csv(data_directory + "income_1099-K.csv")
+    bank_data_income = bank_data.query('category == "income"')
+    income_gross = bank_data_income['amount'].sum()
+    income_1099_MISC = income_data_1099_MISC['amount'].sum()
+    income_1099_NEC = income_data_1099_NEC['amount'].sum()
+    income_1099_K = income_data_1099_K['amount'].sum()
+    income_not_reports_1099 = income_gross - income_1099_MISC - income_1099_NEC - income_1099_K
+    print("Income Gross: $%9.2d" % income_gross)
+    print("Income 1099_MISC: $%9.2d" % income_1099_MISC)
+    print("Income 1099_NEC: $%9.2d" % income_1099_NEC)
+    print("Income 1099_K: $%9.2d" % income_1099_K)
+    print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): $%9.2d" 
+            % income_not_reports_1099)
 
     # output bank data
     # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
