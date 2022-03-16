@@ -4,6 +4,7 @@ from os.path import isfile, join
 import pathlib
 import pdb
 import sys
+import locale
 
 # docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
 
@@ -112,6 +113,7 @@ def assign_categories(bank_data, categories_data):
 
 
 if __name__ == "__main__":
+    print(locale.setlocale(locale.LC_ALL, ''))
     pd.options.display.width = 300
     pd.options.display.max_rows = 1000
     data_directory = "/home/rovitotv/data/QIA_data/2021/"
@@ -130,11 +132,12 @@ if __name__ == "__main__":
     print("summary by category==============================================================================================")
     print(bank_data.groupby('category')['amount'].sum())
     total = bank_data['amount'].sum()
-    print("Total (profit or loss): %f" % total)
+    print("Total (profit or loss): %s" % locale.currency(total, grouping=True))
     bank_data_dont_count = bank_data.query('category == "dont_count"')
     total_dont_count = bank_data_dont_count['amount'].sum()
     total_with_out_dont_count = total - total_dont_count
-    print("Total (profit or loss) without dont_count: %f" % total_with_out_dont_count)
+    print("Total (profit or loss) without dont_count: %s" % 
+        locale.currency(total_with_out_dont_count, grouping=True))
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
     print("Number of unknowns: %d" % len(bank_data_unknown))
@@ -153,12 +156,13 @@ if __name__ == "__main__":
     income_1099_NEC = income_data_1099_NEC['amount'].sum()
     income_1099_K = income_data_1099_K['amount'].sum()
     income_not_reports_1099 = income_gross - income_1099_MISC - income_1099_NEC - income_1099_K
-    print("Income Gross: $%9.2d" % income_gross)
-    print("Income 1099_MISC: $%9.2d" % income_1099_MISC)
-    print("Income 1099_NEC: $%9.2d" % income_1099_NEC)
-    print("Income 1099_K: $%9.2d" % income_1099_K)
-    print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): $%9.2d" 
-            % income_not_reports_1099)
+    # print("Income Gross: $%9.2f" % income_gross)
+    print("Income Gross: %s" % locale.currency(income_gross, grouping=True))
+    print("Income 1099_MISC: %s" % locale.currency(income_1099_MISC, grouping=True))
+    print("Income 1099_NEC: %s" % locale.currency(income_1099_NEC, grouping=True))
+    print("Income 1099_K: %s" % locale.currency(income_1099_K, grouping=True))
+    print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): $%s" 
+            % locale.currency(income_not_reports_1099, grouping=True))
 
     # output bank data
     # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
