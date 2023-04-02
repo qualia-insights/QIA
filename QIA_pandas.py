@@ -181,7 +181,7 @@ if __name__ == "__main__":
     print("Income 1099_MISC: %s" % locale.currency(income_1099_MISC, grouping=True))
     print("Income 1099_NEC: %s" % locale.currency(income_1099_NEC, grouping=True))
     print("Income 1099_K: %s" % locale.currency(income_1099_K, grouping=True))
-    print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): $%s" 
+    print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): %s" 
             % locale.currency(income_not_reports_1099, grouping=True))
 
     # output bank data
