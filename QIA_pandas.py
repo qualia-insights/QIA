@@ -20,7 +20,7 @@ def load_csv_data(path_to_data):
     year_to_process = year_to_process_parts.parts[-1]
     print("year to process: %s" % year_to_process)
     for file_index in range(0, len(only_files)):
-        if only_files[file_index].startswith('income_1099' ):
+        if only_files[file_index].startswith('income_1099' ) or '.swp' in only_files[file_index]:
             continue
         csv_file_name = path_to_data + "/" + only_files[file_index]
         print("processing %s" % csv_file_name)
