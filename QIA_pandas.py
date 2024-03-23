@@ -189,3 +189,9 @@ if __name__ == "__main__":
 
     # output bank data
     # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
+
+    # example of how you dump out a single category to see the detail as a csv file
+    # trying to figure out why the postage is a positive $600 that is very odd
+    # postage_data = bank_data.query('category == "postage"').sort_values(by=('date'), ascending=True)
+    # postage_data.to_csv('/home/rovitotv/temp/postage.csv')
+
