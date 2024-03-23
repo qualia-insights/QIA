@@ -1,0 +1,15 @@
+#!/bin/bash
+# This script backups up QIA data and code to c02 for safe keeping
+#
+echo "QIA backup script starting ===========================================================" >> /home/rovitotv/temp/qia_backup.log 2>&1
+date >> /home/rovitotv/temp/qia_backup.log 2>&1
+
+# backup the data and the code
+tar cvfJ /home/rovitotv/temp/`date + "%Y%m%d"`_qia_backup.tar.xz /home/rovitotv/data/QIA_data /home/rovitotv/code/QIA >> /home/rovitotv/temp/qia_backup.log 2>&1
+scp /home/rovitotv/temp/`date + "%Y%m%d"`_qia_backup.tar.xz rovitotv@c02:/home/rovitotv/USB/taxes >> /home/rovitotv/temp/qia_backup.log 2>&1
+rm -rf /home/rovitotv/temp/`date + "%Y%m%d"`_qia_backup.tar.xz
+
+date >> /home/rovitotv/temp/qia_backup.log 2>&1
+echo "QIA backup script ended ===========================================================" >> /home/rovitotv/temp/qia_backup.log 2>&1
+
+exit 0;
