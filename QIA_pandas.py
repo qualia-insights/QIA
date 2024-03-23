@@ -91,6 +91,9 @@ def assign_categories(bank_data, categories_data):
                 if bank_data.iat[i, 1] == -160.00:
                     category = "rent"
                     break
+                if bank_data.iat[i, 1] == -240.00:
+                    category = "rent"
+                    break
                 if "CHECK 143  REF. NO. 096162985" in bank_data.iat[i, 2]:
                     # for Taxes in 2020
                     category = "dont_count"
