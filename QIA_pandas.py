@@ -7,6 +7,9 @@ import sys
 import locale
 
 # docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
+#
+# bank data has the following fields:
+#        date, amount, description_1, description_2, description_3,type
 
 def load_csv_data(path_to_data):
     '''
