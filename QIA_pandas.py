@@ -135,6 +135,23 @@ def assign_categories(bank_data, categories_data):
         bank_data.iat[i, 6] = category
     return bank_data
 
+# ******************************************************************************
+# Debug functions to help figure out what categories things are in
+def output_bank_data_sort_date_as_csv(bank_data, file_name):
+    # fields:
+    #   date, amount, description_1, description_2, description_3,type
+    # output bank data
+    bank_data.sort_values(by=('date'), ascending=True).to_csv(file_name)
+
+def output_bank_data_filter_sort_date_as_csv(bank_data, category, file_name):
+    # example of how you dump out a single category to see the detail as a csv file
+    # trying to figure out why the postage is a positive $600 that is very odd
+    category_data = bank_data.query('category == "%s"' % category).sort_values(by=('date'), ascending=True)
+    category_data.to_csv(file_name)
+
+def output_bank_data_filter_description_contains_sort_date_as_csv(bank_data, contains_str, file_name):
+    contains_data = bank_data[bank_data['description_1'].str.contains(contains_str)].sort_values(by=('date'), ascending=True)
+    contains_data.to_csv(file_name)
 
 if __name__ == "__main__":
     print(locale.setlocale(locale.LC_ALL, ''))
@@ -190,11 +207,5 @@ if __name__ == "__main__":
     print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): %s" 
             % locale.currency(income_not_reports_1099, grouping=True))
 
-    # output bank data
-    # bank_data.sort_values(by=('date'), ascending=True).to_csv('20210222_bank_data.csv')
-
-    # example of how you dump out a single category to see the detail as a csv file
-    # trying to figure out why the postage is a positive $600 that is very odd
-    # postage_data = bank_data.query('category == "postage"').sort_values(by=('date'), ascending=True)
-    # postage_data.to_csv('/home/rovitotv/temp/postage.csv')
-
+    # output_bank_data_filter_description_contains_sort_date_as_csv(bank_data, "CHECK", "/home/rovitotv/temp/bank_data_check.csv")
+    output_bank_data_sort_date_as_csv(bank_data, "/home/rovitotv/temp/bank_data_all.csv")
