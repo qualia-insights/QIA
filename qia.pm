@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # ============================================================================
-# this is container is for QIA purposes
-# This container is designed for hosts of Raspberry Pi OS which is Debian Bookworm
+# This is container is for QIA purposes
+# This is for podman but docker will work as well
+# It is designed for hosts of Raspberry Pi OS which is Debian Bookworm
 # includes Python, numpy, iPython, 
 #
 # To build container:
