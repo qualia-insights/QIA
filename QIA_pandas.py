@@ -180,7 +180,7 @@ if __name__ == "__main__":
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data(data_directory)
     print("Number of bank_data rows: %d" % len(bank_data))
-    categories_data = read_categories("/home/rovitotv/data/QIA_data/categories.csv")
+    categories_data = read_categories("/home/rovitotv/code/qualia_insights/QIA_data/categories.csv")
     print("Number of categories_data rows: %d" % len(categories_data))
     bank_data = assign_categories(bank_data, categories_data)
     print("bank data with cateegories")
