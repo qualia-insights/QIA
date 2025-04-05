@@ -21,10 +21,10 @@
 # includes Python, numpy, iPython, 
 #
 # To build container:
-#	nohup podman image build -f qia.pm -t qia:20240323 . > ~/temp/20240323_qia.log 2>&1 &
+#	nohup podman image build -f qia.pm -t qia:20250404 . > ~/temp/20250404_qia.log 2>&1 &
 #
 # to run container:
-#   podman run -it --rm --mount type=bind,source=/home/rovitotv,target=/home/rovitotv qia:20240323 
+#   podman run -it --rm --mount type=bind,source=/home/rovitotv,target=/home/rovitotv qia:20250404 
 FROM debian:bookworm
 
 MAINTAINER rovitotv@gmail.com
