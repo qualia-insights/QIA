@@ -175,8 +175,8 @@ if __name__ == "__main__":
     # options below make every float shown with print use commas
     pd.options.display.float_format = '{:,.2f}'.format 
     # pd.options.display.float_format = '${:,.2f}'.format # if you want to include $
-    data_directory = "/home/rovitotv/data/QIA_data/2023/"
-    print("Welcome to QI Pandas Accounting System 2023 by Todd V. Rovito rovitotv@gmail.com")
+    data_directory = "/home/rovitotv/data/QIA_data/2024/"
+    print("Welcome to QI Pandas Accounting System 2024 by Todd V. Rovito rovitotv@gmail.com")
     # for raspberry pi rwind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data(data_directory)
     print("Number of bank_data rows: %d" % len(bank_data))
