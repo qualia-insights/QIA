@@ -214,7 +214,6 @@ if __name__ == "__main__":
     income_1099_NEC = income_data_1099_NEC['amount'].sum()
     income_1099_K = income_data_1099_K['amount'].sum()
     income_not_reports_1099 = income_gross - income_1099_MISC - income_1099_NEC - income_1099_K
-    # print("Income Gross: $%9.2f" % income_gross)
     print("Income Gross: %s" % locale.currency(income_gross, grouping=True))
     print("Income 1099_NEC: %s" % locale.currency(income_1099_NEC, grouping=True))
     print("Income 1099_K: %s" % locale.currency(income_1099_K, grouping=True))
@@ -222,5 +221,5 @@ if __name__ == "__main__":
     print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): %s" 
             % locale.currency(income_not_reports_1099, grouping=True))
 
-    # output_bank_data_filter_description_contains_sort_date_as_csv(bank_data, "CHECK", "/home/rovitotv/temp/bank_data_check.csv")
+    # debug information is saved with this line below
     output_bank_data_sort_date_as_csv(bank_data, "/home/rovitotv/temp/bank_data_all.csv")
