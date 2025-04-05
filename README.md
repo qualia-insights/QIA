@@ -19,6 +19,8 @@ known and easy to install. The list of Python dependencies are:
 
 # General Steps
 
+- sometimes PNCBank doesn't like Linux....and I have to use a Windows VM to get the data
+
 0. Export the month's bank account information from PNCBank.com
 
 1. set the variable path_to_data
