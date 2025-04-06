@@ -144,9 +144,10 @@ def assign_categories(bank_data, categories_data):
             elif not pd.isnull(bank_data.iat[i, 3]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 3].lower():
                 category = categories_data.iat[c, 1]
                 break
-            elif not pd.isnull(bank_data.iat[i, 4]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
-                category = categories_data.iat[c, 1]
-                break
+            # Do I need to search description_3
+            #elif not pd.isnull(bank_data.iat[i, 4]) and categories_data.iat[c, 0].lower() in bank_data.iat[i, 4].lower():
+            #    category = categories_data.iat[c, 1]
+            #    break
         bank_data.iat[i, 6] = category
     return bank_data
 
