@@ -194,7 +194,7 @@ if __name__ == "__main__":
     category_sums = bank_data.groupby('category')['amount'].sum()
     # Create a DataFrame with your desired columns
     summary_table = pd.DataFrame({
-        'Schedule C Section': ["- [       ]"] * len(category_sums),
+        'Schedule C Section': ["- [  ]"] * len(category_sums),
         'Category': category_sums.index,
         'Amount': category_sums.values
     })
