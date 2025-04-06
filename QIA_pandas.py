@@ -190,7 +190,18 @@ if __name__ == "__main__":
     # print(bank_data)
     # pandas sure does make this easy!
     print("summary by category==============================================================================================")
-    print(bank_data.groupby('category')['amount'].sum())
+    #print(bank_data.groupby('category')['amount'].sum())
+    category_sums = bank_data.groupby('category')['amount'].sum()
+    # Create a DataFrame with your desired columns
+    summary_table = pd.DataFrame({
+        'Schedule C Section': ["- [       ]"] * len(category_sums),
+        'Category': category_sums.index,
+        'Amount': category_sums.values
+    })
+    # Format the Amount column to use locale currency
+    summary_table['Amount'] = summary_table['Amount'].apply(lambda x: locale.currency(x, grouping=True))
+    # Print the table
+    print(summary_table.to_string(index=False))
     total = bank_data['amount'].sum()
     print("Total (profit or loss): %s" % locale.currency(total, grouping=True))
     bank_data_dont_count = bank_data.query('category == "dont_count"')
