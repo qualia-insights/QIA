@@ -1,5 +1,5 @@
 # QIA - Qualia Insights Accouting 
-# Copyright (C) 2025 Todd & Linda Rovito / Qualia Insights, LLC
+# Copyright (C) 2026 Todd & Linda Rovito / Qualia Insights, LLC
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
