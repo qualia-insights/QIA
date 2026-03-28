@@ -19,8 +19,6 @@ known and easy to install. The list of Python dependencies are:
 
 # General Steps
 
-- sometimes PNCBank doesn't like Linux....and I have to use a Windows VM to get the data
-
 0. Export the month's bank account information from PNCBank.com
 
 1. set the variable path_to_data
@@ -49,9 +47,9 @@ categories = read_categories("/home/pi/qualia_insights_accounting/data/categorie
 
 2. Save graphs as images then place into reports
 
-3. Make a different in transactions for personal and business.  For example
-we might have an expense that is paid with personal.  I am thinking have
-different names for the data files.
+3. Make a different csv file in transactions for personal and business.  For
+   example we might have an expense that is paid with personal.  I am thinking
+have different names for the data files.
 
 4. Check out https://plaintextaccounting.org/. Specifically https://github.com/beancount/beancount/
 
