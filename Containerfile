@@ -21,7 +21,7 @@
 # includes Python, numpy, iPython, 
 #
 # To build container:
-#	nohup podman image build -f qia.pm -t qia:20260328 . > ~/temp/20260328_qia.log 2>&1 &
+#	nohup podman image build -f Containerfile -t qia:20260328 . > ~/temp/20260328_qia.log 2>&1 &
 #
 # to run container:
 #   podman run -it --rm --mount type=bind,source=/home/rovitotv,target=/home/rovitotv qia:20260328 
@@ -49,17 +49,17 @@ RUN apt-get update && apt-get install -y \
 	tmux \
 	zip \
 	unzip \
-        iputils-ping \
+    iputils-ping \
 	libpng-dev \
 	libjpeg-dev \
 	python3-dev \
 	python3-pip \
-	libatlas-base-dev \
-        python3-numpy \
-        python3-scipy \
-        python3-pandas \
-        python3-matplotlib \
-        ipython3 
+    libopenblas-dev \
+    python3-numpy \
+    python3-scipy \
+    python3-pandas \
+    python3-matplotlib \
+    ipython3 
 
 ## Debian Bookworm requires that we delete this file so pip packages can be installed
 # RUN rm -rf /usr/lib/python3.11/EXTERNALLY-MANAGED
