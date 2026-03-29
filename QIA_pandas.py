@@ -57,8 +57,10 @@ def load_csv_data(path_to_data):
                 names=['date', 'desc', 'amount'],  # Map to our columns
             )
 
-            # THIS IS THE FIX: Convert date to datetime AFTER renaming
-            new_df['date'] = pd.to_datetime(new_df['date'], errors='coerce')
+            # Convert date to datetime, using explicit format and drop invalid rows
+            new_df['date'] = pd.to_datetime(new_df['date'], format='%Y-%m-%d', errors='coerce')
+            # Remove rows where date could not be parsed
+            new_df = new_df.dropna(subset=['date'])
     
             # Clean amount (remove $, commas, etc.)
             new_df['amount'] = new_df['amount'].str.replace(r'[^0-9.-]', '', regex=True)
@@ -78,20 +80,16 @@ def load_csv_data(path_to_data):
             month_data = new_df[['date', 'amount', 'description_1', 'description_2', 'description_3', 'type']].copy()
 
         if len(month_data) > 0:
-            # we need to check and make sure the data is from the proper year!
-            # this in case doo doo brian downloads a csv file outside of the correct range
-            start_day = pd.to_datetime('01.01.%s' % year_to_process)
-            end_day = pd.to_datetime('12.31.%s' % year_to_process)
-            month_data_between = month_data[month_data['date'].between(start_day, end_day)]
-            if len(month_data_between) != len(month_data):
-                print("month data includes data outside of the year %s" % year_to_process)
-                sys.exit(200)
+            # ensure all dates are within the target year
+            month_data = month_data[month_data['date'].dt.year == int(year_to_process)]
+            # optional: drop any rows that still have NaT dates
+            month_data = month_data.dropna(subset=['date'])
             if bank_data is None:
                 bank_data = month_data
             else:
                 bank_data = pd.concat([month_data, bank_data])
  
-    if year_to_process <= 2024:
+    if int(year_to_process) <= 2024:
         # this is the power of pandas!
         # we can look up all the transaction type of "DEBIT" and change
         # multiple the amount by -1 in one line of CLEAR CODE
@@ -249,6 +247,7 @@ if __name__ == "__main__":
         # field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
         print(bank_data_unknown[['date','amount','description_1']])
     print("Number of unknowns: %d" % len(bank_data_unknown))
+    '''
     print("Business Income - Gross Receipts================================================================================")
     income_data_1099_MISC = load_income_1099_csv(data_directory + "income_1099-MISC.csv")
     income_data_1099_NEC = load_income_1099_csv(data_directory + "income_1099-NEC.csv")
@@ -265,6 +264,6 @@ if __name__ == "__main__":
     print("Income 1099_MISC: %s" % locale.currency(income_1099_MISC, grouping=True))
     print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): %s" 
             % locale.currency(income_not_reports_1099, grouping=True))
-
+    '''
     # debug information is saved with this line below
     output_bank_data_sort_date_as_csv(bank_data, "/home/rovitotv/temp/bank_data_all.csv")
