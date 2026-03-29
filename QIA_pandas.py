@@ -23,9 +23,13 @@ import locale
 
 # docuemtnation URL for pandas 0.22 https://pandas.pydata.org/pandas-docs/version/0.22.0/
 #
-# bank data has the following fields:
+# bank data has the following fields when year_to_process <= 2024:
 #        date, amount, description_1, description_2, description_3,type
-
+# bank data has the following fields when year_to_process >= 2025
+#       "2025-01-02","DEBIT CARD PURCHASE xxxxxxxxxxxxxxxx9969 GOOGLE*GSUITE QUALIAIN CC GOOGLE.C CA","- $15.37"
+#       "2025-01-02","HNB - ECHO HCCLAIMPMT CORPORATE ACH xxxxx0520","+ $14.23"
+#       date, description_1, amount
+#       NOTE* the amount field will determine type a + means 
 def load_csv_data(path_to_data):
     '''
         provided the path to the data load the data but skip the
@@ -41,10 +45,37 @@ def load_csv_data(path_to_data):
         if only_files[file_index].startswith('income_1099' ) or '.swp' in only_files[file_index]:
             continue
         csv_file_name = path_to_data + "/" + only_files[file_index]
-        print("processing %s" % csv_file_name)
-        month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
-            'description_2', 'description_3','type'],
-            parse_dates=['date'])
+        if int(year_to_process) <= 2024:
+            print("processing %s" % csv_file_name)
+            month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
+                    'description_2', 'description_3','type'], parse_dates=['date'])
+        elif int(year_to_process) >= 2025:
+            # USE HEADER (NOT skiprows=1)
+            new_df = pd.read_csv(
+                csv_file_name,
+                header=0,  # <-- THIS IS THE FIX (use the header row)
+                names=['date', 'desc', 'amount'],  # Map to our columns
+            )
+
+            # THIS IS THE FIX: Convert date to datetime AFTER renaming
+            new_df['date'] = pd.to_datetime(new_df['date'], errors='coerce')
+    
+            # Clean amount (remove $, commas, etc.)
+            new_df['amount'] = new_df['amount'].str.replace(r'[^0-9.-]', '', regex=True)
+            new_df['amount'] = pd.to_numeric(new_df['amount'], errors='coerce')
+    
+            # Derive type (DEBIT/CREDIT)
+            new_df['type'] = new_df['amount'].apply(
+                lambda x: 'DEBIT' if x < 0 else 'CREDIT'
+            )
+    
+            # Prepare description columns (legacy format)
+            new_df['description_1'] = new_df['desc']
+            new_df['description_2'] = ""
+            new_df['description_3'] = ""
+    
+            # Reorder to legacy columns
+            month_data = new_df[['date', 'amount', 'description_1', 'description_2', 'description_3', 'type']].copy()
 
         if len(month_data) > 0:
             # we need to check and make sure the data is from the proper year!
@@ -59,10 +90,12 @@ def load_csv_data(path_to_data):
                 bank_data = month_data
             else:
                 bank_data = pd.concat([month_data, bank_data])
-    # this is the power of pandas!
-    # we can look up all the transaction type of "DEBIT" and change
-    # multiple the amount by -1 in one line of CLEAR CODE
-    bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
+ 
+    if year_to_process <= 2024:
+        # this is the power of pandas!
+        # we can look up all the transaction type of "DEBIT" and change
+        # multiple the amount by -1 in one line of CLEAR CODE
+        bank_data.loc[bank_data.type == "DEBIT", 'amount'] *= -1
     return bank_data
 
 def load_income_1099_csv(path_to_csv_file):
@@ -176,9 +209,9 @@ if __name__ == "__main__":
     # options below make every float shown with print use commas
     pd.options.display.float_format = '{:,.2f}'.format 
     # pd.options.display.float_format = '${:,.2f}'.format # if you want to include $
-    data_directory = "/home/rovitotv/code/qualia_insights/QIA_data/2024/"
-    print("Welcome to QI Pandas Accounting System 2024 by Todd V. Rovito rovitotv@gmail.com")
-    # for raspberry pi rwind data is /home/rovitotv/data/QIA
+    data_directory = "/home/rovitotv/code/qualia_insights/QIA_data/2025/"
+    print("Welcome to QI Pandas Accounting System 2025 by Todd V. Rovito rovitotv@gmail.com")
+    # for raspberry pi rewind data is /home/rovitotv/data/QIA
     bank_data = load_csv_data(data_directory)
     print("Number of bank_data rows: %d" % len(bank_data))
     categories_data = read_categories("/home/rovitotv/code/qualia_insights/QIA_data/categories.csv")
