@@ -45,8 +45,8 @@ def load_csv_data(path_to_data):
         if only_files[file_index].startswith('income_1099' ) or '.swp' in only_files[file_index]:
             continue
         csv_file_name = path_to_data + "/" + only_files[file_index]
+        print("processing %s" % csv_file_name)
         if int(year_to_process) <= 2024:
-            print("processing %s" % csv_file_name)
             month_data = pd.read_csv(csv_file_name, header=None, skiprows=1, names=['date', 'amount', 'description_1',
                     'description_2', 'description_3','type'], parse_dates=['date'])
         elif int(year_to_process) >= 2025:
