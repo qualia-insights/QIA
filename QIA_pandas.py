@@ -243,9 +243,9 @@ if __name__ == "__main__":
     print("unknowns=========================================================================================================")
     bank_data_unknown = bank_data.query('category == "unknown"').sort_values(by=('date'), ascending=True)
     if len(bank_data_unknown) > 0:
-        #print(bank_data_unknown)
-        # field names: ['date', 'amount', 'description_1', 'description_2', 'description_3','type'],
-        print(bank_data_unknown[['date','amount','description_1']])
+        # Show the full description (1‑3) for each unknown transaction
+        pd.options.display.max_colwidth = 200   # make sure the text fits
+        print(bank_data_unknown[['date','amount','description_1','description_2','description_3']])
     print("Number of unknowns: %d" % len(bank_data_unknown))
     '''
     print("Business Income - Gross Receipts================================================================================")
