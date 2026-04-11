@@ -247,7 +247,6 @@ if __name__ == "__main__":
         pd.options.display.max_colwidth = 200   # make sure the text fits
         print(bank_data_unknown[['date','amount','description_1','description_2','description_3']])
     print("Number of unknowns: %d" % len(bank_data_unknown))
-    '''
     print("Business Income - Gross Receipts================================================================================")
     income_data_1099_MISC = load_income_1099_csv(data_directory + "income_1099-MISC.csv")
     income_data_1099_NEC = load_income_1099_csv(data_directory + "income_1099-NEC.csv")
@@ -264,6 +263,5 @@ if __name__ == "__main__":
     print("Income 1099_MISC: %s" % locale.currency(income_1099_MISC, grouping=True))
     print("Gross receipts (not reports on form 1099-NEC, 1099-MISC or 1099-K): %s" 
             % locale.currency(income_not_reports_1099, grouping=True))
-    '''
     # debug information is saved with this line below
     output_bank_data_sort_date_as_csv(bank_data, "/home/rovitotv/temp/bank_data_all.csv")
